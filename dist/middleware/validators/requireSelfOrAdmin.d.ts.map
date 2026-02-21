@@ -1,0 +1,1 @@
+{"version":3,"file":"requireSelfOrAdmin.d.ts","sourceRoot":"","sources":["../../../src/middleware/validators/requireSelfOrAdmin.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,cAAc,EAAE,MAAM,SAAS,CAAA;AAGxC,eAAO,MAAM,kBAAkB,EAAE,cAYhC,CAAA"}
