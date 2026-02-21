@@ -1,1 +1,0 @@
-{"version":3,"file":"validateUserId.d.ts","sourceRoot":"","sources":["../../../src/middleware/validators/validateUserId.ts"],"names":[],"mappings":"AAAA,OAAO,EAAE,cAAc,EAAE,MAAM,SAAS,CAAA;AAMxC,eAAO,MAAM,cAAc,EAAE,cAAc,CAAC;IAAC,EAAE,EAAC,MAAM,CAAA;CAAC,CAWtD,CAAA"}
