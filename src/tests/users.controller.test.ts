@@ -122,40 +122,47 @@ test("PATCH /users/:id as self trying to change role -> 403", async () => {
     expect(login.body.user).not.toHaveProperty("passwordHash"); // DTO must hide it
   });
 
-  test("GET /users with token -> 200 + array", async () => {
-    // seed DB by registering 2 users
-    const r1 = await registerUser({
-      email: "u1@test.com",
-      password: "Password123!",
-      name: "UserOne",
-    });
-    expect(r1.status).toBe(201);
-
-    const r2 = await registerUser({
-      email: "u2@test.com",
-      password: "Password123!",
-      name: "UserTwo",
-    });
-    expect(r2.status).toBe(201);
-
-    // login u1 and call protected route
-    const login = await loginUser({ email: "u1@test.com", password: "Password123!" });
-    expect(login.status).toBe(200);
-    const token = login.body.token as string;
-
-    const res = await request(app)
-      .get("/users")
-      .set("Authorization", `Bearer ${token}`);
-
-    expect(res.status).toBe(200);
-    expect(Array.isArray(res.body)).toBe(true);
-    expect(res.body.length).toBe(2);
-
-    // quick shape check
-    expect(res.body[0]).toHaveProperty("id");
-    expect(res.body[0]).toHaveProperty("email");
-    expect(res.body[0]).toHaveProperty("role");
+  test("GET /users as admin -> 200 + array", async () => {
+  const r1 = await registerUser({
+    email: "u1@test.com",
+    password: "Password123!",
+    name: "UserOne",
   });
+  expect(r1.status).toBe(201);
+
+  const r2 = await registerUser({
+    email: "u2@test.com",
+    password: "Password123!",
+    name: "UserTwo",
+  });
+  expect(r2.status).toBe(201);
+
+  // promote u1 to admin BEFORE login, because JWT stores role at login time
+  await User.updateOne(
+    { email: "u1@test.com" },
+    { $set: { role: "admin" } }
+  );
+
+  const login = await loginUser({
+    email: "u1@test.com",
+    password: "Password123!",
+  });
+  expect(login.status).toBe(200);
+
+  const token = login.body.token as string;
+
+  const res = await request(app)
+    .get("/users")
+    .set("Authorization", `Bearer ${token}`);
+
+  expect(res.status).toBe(200);
+  expect(Array.isArray(res.body)).toBe(true);
+  expect(res.body.length).toBe(2);
+
+  expect(res.body[0]).toHaveProperty("id");
+  expect(res.body[0]).toHaveProperty("email");
+  expect(res.body[0]).toHaveProperty("role");
+});
 
   test("DELETE /users/:id as normal user -> 403", async () => {
     // create two normal users

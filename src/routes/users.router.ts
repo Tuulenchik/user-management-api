@@ -8,12 +8,12 @@ import { authMiddleware } from "../middleware/validators/authMiddleware";
 import { validateAdmin } from "../middleware/validators/validateAdmin";
 import { requireSelfOrAdmin } from "../middleware/validators/requireSelfOrAdmin";
 import { forbidRoleChangeUnlessAdmin } from "../middleware/validators/forbidRoleChangeUnlessAdmin";
-const router = express.Router()
+const usersRouter = express.Router()
 
 
-router.get('/', authMiddleware, validateAdmin, validateRoleFiltering, asyncHandler(getUsersDB))
-router.get('/:id', authMiddleware, validateUserId, requireSelfOrAdmin, asyncHandler(getUserById))
-router.patch('/:id', authMiddleware, validateUserId, requireSelfOrAdmin, validateUpdateUser, forbidRoleChangeUnlessAdmin, asyncHandler(updateUser))
-router.delete('/:id', authMiddleware, validateAdmin, validateUserId, asyncHandler(deleteUser))
+usersRouter.get('/', authMiddleware, validateAdmin, validateRoleFiltering, asyncHandler(getUsersDB))
+usersRouter.get('/:id', authMiddleware, validateUserId, requireSelfOrAdmin, asyncHandler(getUserById))
+usersRouter.patch('/:id', authMiddleware, validateUserId, requireSelfOrAdmin, validateUpdateUser, forbidRoleChangeUnlessAdmin, asyncHandler(updateUser))
+usersRouter.delete('/:id', authMiddleware, validateAdmin, validateUserId, asyncHandler(deleteUser))
 
-export default router
+export default usersRouter

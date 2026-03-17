@@ -11,6 +11,7 @@ interface Config{
 }
 
 const rawPort = process.env.PORT;
+const nodeEnv = process.env.NODE_ENV ?? 'development'
 const mongoUri = process.env.MONGO_URI
 const jwtSecret = process.env.JWT_SECRET
 const clientOrigin = process.env.CLIENT_ORIGIN ?? "http://localhost:3000"
@@ -39,7 +40,7 @@ if (!jwtSecret) {
 //we make new config after everything is checked:
 const config: Config = {
   port,
-  nodeEnv: process.env.NODE_ENV ?? 'development',
+  nodeEnv,
   mongoUri,
   jwtSecret,
   clientOrigin
